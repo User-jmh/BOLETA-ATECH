@@ -1,17 +1,17 @@
-const SUPABASE_URL = "https://pewzovmuynionkjkljqo.supabase.co"; 
-const SUPABASE_KEY = "sb_publishable_4i3U-7-3t9cMy7w2OoF1nw_Ih5KkRzF"; 
+const SUPABASE_URL = "https://pewzovmuynionkjkljqo.supabase.co";
+const SUPABASE_KEY = "sb_publishable_4i3U-7-3t9cMy7w2OoF1nw_Ih5KkRzF";
 const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 window.onload = async () => {
     const inBoleta = document.getElementById('in_boleta');
     inBoleta.readOnly = true;
-    inBoleta.style.backgroundColor = "#2d3748"; 
+    inBoleta.style.backgroundColor = "#2d3748";
     inBoleta.style.cursor = "not-allowed";
-    
+
     console.log("AtomSystem: Sincronizando datos...");
     await cargarClientesDesdeNube();
     await actualizarHistorialNube();
-    await generarProximoNumero(); 
+    await generarProximoNumero();
     sincronizar();
 };
 
@@ -21,7 +21,7 @@ async function generarProximoNumero() {
         const { data } = await _supabase
             .from('boletas')
             .select('numero_boleta')
-            .order('id', { ascending: false }) 
+            .order('id', { ascending: false })
             .limit(1);
 
         if (data && data.length > 0) {
@@ -84,16 +84,16 @@ async function actualizarHistorialNube() {
     const list = document.getElementById('history-list');
     if (!list) return;
     list.innerHTML = "";
-    
+
     data?.forEach(b => {
         // Formatear fecha para humanos (Ej: 04/03/2026 15:30)
         const d = new Date(b.actualizada_at);
-        const fechaTxt = d.toLocaleDateString() + " " + d.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        const fechaTxt = d.toLocaleDateString() + " " + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
         const div = document.createElement('div');
         div.className = 'history-item';
         div.style = "background:#1a202c; padding:12px; margin-top:8px; border-radius:8px; cursor:pointer; display:flex; justify-content:space-between; border-left: 5px solid #4fd1c5;";
-        
+
         div.onclick = () => {
             alert("Editando Boleta " + b.numero_boleta + "\nÚltima modificación: " + fechaTxt);
             cargarBoletaDesdeHistorial(b);
@@ -115,7 +115,7 @@ async function actualizarHistorialNube() {
 
 // --- PREPARAR NUEVA VENTA ---
 async function prepararNuevaVenta() {
-    if(confirm("¿Deseas limpiar la pantalla para una nueva boleta?")) {
+    if (confirm("¿Deseas limpiar la pantalla para una nueva boleta?")) {
         document.getElementById('in_nombre').value = "";
         document.getElementById('in_dni').value = "";
         document.getElementById('items-container').innerHTML = "";
@@ -206,14 +206,14 @@ function cargarCliente() {
 
     const c = JSON.parse(opt.dataset.info);
     document.getElementById('in_nombre').value = c.nombre;
-    
+
     // Mostramos DNI y Dirección juntos
     const infoCliente = `${c.dni || ''} | ${c.direccion || 'Sin dirección'}`;
     document.getElementById('in_dni').value = infoCliente;
-    
+
     document.getElementById('items-container').innerHTML = "";
     crearFilaItem(c.plan_original, c.precio_original);
-    
+
     sincronizar();
 }
 
@@ -222,7 +222,7 @@ function numeroALetrasPeruanas(num) {
     const unidades = ['UN', 'DOS', 'TRES', 'CUATRO', 'CINCO', 'SEIS', 'SIETE', 'OCHO', 'NUEVE'];
     const decenas = ['DIEZ', 'VEINTE', 'TREINTA', 'CUARENTA', 'CINCUENTA', 'SESENTA', 'SETENTA', 'OCHENTA', 'NOVENTA'];
     const especiales = ['ONCE', 'DOCE', 'TRECE', 'CATORCE', 'QUINCE', 'DIECISEIS', 'DIECISIETE', 'DIECIOCHO', 'DIECINUEVE'];
-    
+
     let entero = Math.floor(num);
     let centimos = Math.round((num - entero) * 100);
     let letras = "";
@@ -248,7 +248,7 @@ function numeroALetrasPeruanas(num) {
 const observer = new MutationObserver(() => {
     const totalActual = document.getElementById('out_total').innerText;
     const montoNumerico = parseFloat(totalActual.replace(/[^0-9.]/g, ''));
-    
+
     if (!isNaN(montoNumerico)) {
         document.getElementById('out_total_letras').innerText = numeroALetrasPeruanas(montoNumerico);
     }
