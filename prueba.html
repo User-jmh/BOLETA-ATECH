@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Boleta Electrónica - ATOM TECHNOLOGY SAC</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --atom-black: #0F172A;   /* Negro/Azul Noche Profundo */
+            --atom-white: #FFFFFF;   /* Blanco Puro */
+            --atom-accent: #00FFB2;  /* Verde Neón Tecnológico */
+            --atom-gray-bg: #F8FAFC; /* Gris Gélido Claro */
+            --atom-text-gray: #94A3B8;
+            --atom-border: #E2E8F0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #CBD5E1; /* Fondo de página gris suave */
+            margin: 0; padding: 40px;
+            display: flex; justify-content: center;
+        }
+
+        .invoice-a4 {
+            width: 210mm; min-height: 297mm;
+            background: var(--atom-white);
+            box-shadow: 0 40px 80px rgba(15, 23, 42, 0.2);
+            display: flex; flex-direction: column;
+            border-radius: 4px; overflow: hidden;
+            position: relative;
+        }
+
+        /* Franja decorativa lateral tecnológica */
+        .side-accent {
+            position: absolute; left: 0; top: 0; bottom: 0;
+            width: 10px; background: linear-gradient(to bottom, var(--atom-black), var(--atom-accent));
+        }
+
+        /* CABECERA OSCURA DE ALTO IMPACTO */
+        .header {
+            background-color: var(--atom-black);
+            color: var(--atom-white);
+            padding: 50px 60px 50px 70px;
+            display: flex; justify-content: space-between; align-items: center;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+        }
+
+        .brand-logo h1 {
+            font-family: 'Orbitron', sans-serif;
+            margin: 0; font-size: 32px; font-weight: 900;
+            letter-spacing: -1px; text-transform: uppercase;
+        }
+        .brand-logo h1 span { color: var(--atom-accent); text-shadow: 0 0 15px rgba(0, 255, 178, 0.4); }
+        .brand-logo p { margin: 5px 0 0; font-size: 11px; color: var(--atom-accent); font-weight: 600; letter-spacing: 2px; }
+
+        .company-details { font-size: 11px; opacity: 0.7; margin-top: 15px; line-height: 1.5; }
+
+        .ruc-box {
+            text-align: right; border-right: 4px solid var(--atom-accent);
+            padding-right: 20px;
+        }
+        .ruc-box h2 { margin: 0; font-size: 13px; opacity: 0.8; font-weight: 600; }
+        .ruc-box .serie { font-size: 18px; font-weight: 800; color: var(--atom-accent); margin-top: 3px; display: block; }
+
+        /* CUERPO CLARO */
+        .content { padding: 30px 60px 30px 70px; flex-grow: 1; }
+
+        .client-section {
+            display: grid; grid-template-columns: 1.5fr 1fr; gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .card { background: var(--atom-gray-bg); padding: 25px; border-radius: 12px; border: 1px solid var(--atom-border); }
+        .data-label { font-size: 10px; font-weight: 800; color: var(--atom-text-gray); text-transform: uppercase; letter-spacing: 1px; }
+        .data-value { font-size: 15px; font-weight: 700; margin-top: 8px; color: var(--atom-black); }
+
+        /* TABLA DE SERVICIOS - ESTILO CORPORATIVO */
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        
+        thead th {
+            text-align: left; padding: 12px 15px;
+            border-bottom: 2px solid var(--atom-black);
+            color: var(--atom-black); font-weight: 800; font-size: 11px;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        tbody td {
+            padding: 20px 15px; border-bottom: 1px solid #F1F5F9; font-size: 14px;
+        }
+
+        .service-title { font-weight: 700; color: var(--atom-black); }
+        .service-desc { 
+            font-family: 'Space Mono', monospace; font-size: 11px; 
+            color: #64748B; background: #F8FAFC; padding: 2px 6px; border-radius: 4px; display: inline-block; margin-top: 5px;
+        }
+
+        /* SECCIÓN DE PLANES CON FONDO CLARO */
+        .planes-catalog {
+            margin: 40px 0;
+            padding: 25px;
+            background: var(--atom-gray-bg);
+            border-radius: 12px;
+            border: 1px solid var(--atom-border);
+        }
+
+        .catalog-title { font-weight: 800; font-size: 11px; color: var(--atom-black); margin-bottom: 15px; text-align: center; text-transform: uppercase; }
+        .planes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+
+        .plan-item {
+            background: white; border: 2px solid #E2E8F0;
+            padding: 15px; border-radius: 10px; text-align: center;
+            transition: transform 0.3s;
+        }
+        .plan-item .speed { font-size: 18px; font-weight: 800; color: var(--atom-black); }
+        .plan-item .price { font-size: 16px; font-weight: 700; color: var(--atom-accent); background: var(--atom-black); border-radius: 6px; margin-top: 8px; padding: 3px; display: block;}
+        .plan-item .conversion { font-size: 10px; color: #64748B; border-top: 1px dashed #E2E8F0; margin-top: 10px; padding-top: 8px; }
+
+        /* PIE DE PÁGINA OSCURO */
+        .footer {
+            background-color: var(--atom-black);
+            color: var(--atom-white);
+            padding: 40px 60px 40px 70px;
+            display: flex; justify-content: space-between; align-items: flex-end;
+            clip-path: polygon(0 15%, 100% 0, 100% 100%, 0 100%);
+        }
+
+        .contact-links { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 10px; font-size: 11px; opacity: 0.8; }
+        .contact-item { display: flex; align-items: center; gap: 8px; }
+        .icon-box { width: 14px; height: 14px; fill: var(--atom-accent); }
+
+        .total-box { text-align: right; }
+        .total-box .amount { font-family: 'Orbitron', sans-serif; font-size: 48px; font-weight: 900; color: var(--atom-accent); text-shadow: 0 0 10px rgba(0, 255, 178, 0.3); }
+
+    </style>
+</head>
+<body>
+
+    <div class="invoice-a4">
+        <div class="side-accent"></div>
+
+        <div class="header">
+            <div class="brand-logo">
+                <h1>ATOM<span>TECHNOLOGY</span></h1>
+                <p>NUESTROS PLANES SON TU POTENCIA</p>
+                <div class="company-details">
+                    ATOM TECHNOLOGY SAC | RUC 20778899441<br>
+                    Av. El Futuro 101, San Isidro, Lima, Perú
+                </div>
+            </div>
+            <div class="ruc-box">
+                <h2>BOLETA DE VENTA ELECTRÓNICA</h2>
+                <span class="serie">B001 - N° 0005230</span>
+                <div style="font-size: 12px; margin-top: 10px; font-weight: 600; color: var(--atom-accent);">04 MARZO 2026</div>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="client-section">
+                <div class="card">
+                    <div class="data-label">Cliente Premium</div>
+                    <div class="data-value">Alejandro Villarreal</div>
+                    <div style="font-size: 13px; color: var(--atom-text-gray); margin-top: 5px;">
+                        DNI: 45663322 | Calle Las Orquídeas 123, Miraflores
+                    </div>
+                </div>
+                <div class="card" style="border-right: 5px solid var(--atom-black);">
+                    <div class="label" style="font-size: 10px; font-weight: 800; color: #94A3B8; text-transform: uppercase;">Detalles de Facturación</div>
+                    <div class="data-value">Ciclo: Marzo (31 Días)</div>
+                    <div style="font-size: 13px; color: var(--atom-accent); background: var(--atom-black); padding: 2px 8px; border-radius: 4px; display: inline-block; margin-top: 5px;">VENCE: 15 ABRIL</div>
+                </div>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 75%;">Descripción detallada del Servicio Técnico</th>
+                        <th style="text-align: right;">Subtotal (S/)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="service-title">Fibra Óptica Simétrica - 20 Mbps</div>
+                            <div class="service-desc">CONEXIÓN GAMER // RANGO DE SERVICIO: 31 DÍAS (MAR) // MES 1/3</div>
+                        </td>
+                        <td style="font-weight: 800; font-size: 18px; text-align: right;">60.00</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="planes-catalog">
+                <div class="catalog-title">🚀 MEJORA TU VELOCIDAD CON NUESTROS PLANES</div>
+                <div class="planes-grid">
+                    <div class="plan-item">
+                        <span class="label">BÁSICO</span>
+                        <span class="speed">15 Mbps</span>
+                        <span class="price">S/ 40.00</span>
+                        <div class="conversion">Retorna a: <strong>10 Mbps</strong></div>
+                    </div>
+                    <div class="plan-item" style="border-color: var(--atom-accent); background: #f0fffb; transform: scale(1.03);">
+                        <span class="label" style="color:var(--atom-accent); font-weight:800;">RECOMENDADO</span>
+                        <span class="speed">20 Mbps</span>
+                        <span class="price">S/ 60.00</span>
+                        <div class="conversion">Retorna a: <strong>15 Mbps</strong></div>
+                    </div>
+                    <div class="plan-item">
+                        <span class="label">PREMIUM</span>
+                        <span class="speed">30 Mbps</span>
+                        <span class="price">S/ 90.00</span>
+                        <div class="conversion">Retorna a: <strong>22 Mbps</strong></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div style="width: 60%;">
+                <div style="font-size: 14px; font-weight: 700; color: var(--atom-accent);">MÉDOTOS DE PAGO: BCP / BBVA (Convenio 9900)</div>
+                <div style="font-weight: 700; margin-top: 10px; border-bottom: 1px dashed rgba(255,255,255,0.2); padding-bottom: 10px;">SON: CIENTO TREINTA CON 00/100 SOLES</div>
+                <div class="contact-links">
+                    <div class="contact-item">
+                        <svg class="icon-box" viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+                        (01) 400-2020
+                    </div>
+                    <div class="contact-item">
+                        <svg class="icon-box" viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2z"/></svg>
+                        987 654 321
+                    </div>
+                    <div class="contact-item">
+                        <svg class="icon-box" viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm6.93 6h-2.95a15.65 15.65 0 0 0-1.38-3.56A8.03 8.03 0 0 1 18.92 8z"/></svg>
+                        atomtechnology.pe
+                    </div>
+                </div>
+            </div>
+            <div class="total-box">
+                <div style="font-size: 12px; font-weight: 700; color: var(--atom-accent); text-transform: uppercase;">Total a Liquidar (S/)</div>
+                <div class="amount">130.00</div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

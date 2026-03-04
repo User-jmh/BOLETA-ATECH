@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SISTEMA CLOUD ATOM v6.0</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Plus+Jakarta+Sans:wght@400;700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <aside class="admin-panel">
+        <div class="panel-header">
+            <h2>ATOM CLOUD</h2>
+            <div id="db-status" class="status-online">SISTEMA LISTO</div>
+        </div>
+
+        <div class="form-group">
+            <label>1. Seleccionar Cliente de la Nube</label>
+            <div style="display: flex; gap: 8px;">
+                <select id="select_cliente" onchange="cargarCliente()" style="flex: 1;">
+                    <option value="">-- Conectando... --</option>
+                </select>
+                <button onclick="abrirModal()" class="btn-mini" title="Registrar nuevo cliente">+</button>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="form-group">
+            <label>2. Información de Boleta</label>
+            <input type="text" id="in_boleta" placeholder="N° Boleta" readonly>
+            <input type="text" id="in_nombre" readonly placeholder="Nombre del Titular" style="margin-top:8px;">
+            <input type="text" id="in_dni" readonly placeholder="DNI / Dirección"
+                style="margin-top:8px; font-size:11px;">
+        </div>
+
+        <div class="items-manager">
+            <label class="section-label">3. Detalle de Cobro</label>
+            <div id="items-container"></div>
+            <button class="btn-add" onclick="crearFilaItem()">+ AÑADIR CARGO EXTRA</button>
+        </div>
+
+        <div class="actions">
+            <button class="btn-save" onclick="guardarEnNube()">💾 GUARDAR / EDITAR</button>
+            <button class="btn-generate" onclick="imprimirYGuardar()">🖨️ IMPRIMIR / PDF</button>
+            <button class="btn-new" onclick="prepararNuevaVenta()"
+                style="margin-top: 10px; width: 100%; background: #4a5568; color: white; border: none; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: bold;">✨
+                NUEVA BOLETA</button>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="history-section">
+            <label class="section-label">HISTORIAL RECIENTE (CLOUD)</label>
+            <div id="history-list"></div>
+        </div>
+    </aside>
+
+    <main class="preview-area">
+        <div class="invoice-a4" id="boleta-final">
+            <div class="side-accent"></div>
+            <header class="header">
+                <div>
+                    <h1>ATOM<span>TECHNOLOGY</span></h1>
+                    <p style="text-transform: uppercase;">Tecnología que te mantiene conectado.</p>
+
+                    <div class="company-details">
+                        ATOM TECHNOLOGY SAC | RUC 20778899441<br>
+                        CHAVÍN DE HUÁNTAR, Perú
+                    </div>
+                </div>
+                <div class="ruc-box">
+                    <span class="doc-type">BOLETA ELECTRÓNICA</span>
+                    <span class="serie" id="out_boleta">---</span>
+                    <span class="date" id="fecha-actual">04 MARZO 2026</span>
+                </div>
+            </header>
+
+            <div class="content">
+                <div class="client-grid">
+                    <div class="card">
+                        <span class="label">CLIENTE REGISTRADO</span>
+                        <div class="value-name" id="out_nombre">---</div>
+                        <div class="value-sub" id="out_dni">---</div>
+                    </div>
+                    <div class="card card-dark">
+                        <span class="label">PERIODO DE FACTURACIÓN</span>
+                        <div class="value-name">MARZO 2026</div>
+                        <span class="status-badge">RECIBO DE SERVICIO</span>
+                    </div>
+                </div>
+
+                <table class="items-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 75%;">Descripción detallada del Servicio Técnico</th>
+                            <th class="text-right">Monto (S/)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="out_table_body"></tbody>
+                </table>
+
+
+                <div class="planes-catalog">
+                    <div class="catalog-title">🚀 MEJORA TU VELOCIDAD CON NUESTROS PLANES</div>
+                    <div class="planes-grid">
+                        <div class="plan-item">
+                            <span class="label">BÁSICO</span> <br>
+                            <span class="speed">15 Mbps</span>
+                            <span class="price">S/ 40.00</span>
+                            <div class="conversion">Despúes <strong>10 Mbps</strong></div>
+                        </div>
+                        <div class="plan-item"
+                            style="border-color: var(--atom-accent); background: #f0fffb; transform: scale(1.03);">
+                            <span class="label" style="color:var(--atom-accent); font-weight:800;">RECOMENDADO</span>
+                            <br>
+                            <span class="speed">20 Mbps</span>
+                            <span class="price">S/ 60.00</span>
+                            <div class="conversion">Despúes: <strong>15 Mbps</strong></div>
+                        </div>
+                        <div class="plan-item">
+                            <span class="label">PREMIUM</span> <br>
+                            <span class="speed">30 Mbps</span>
+                            <span class="price">S/ 90.00</span>
+                            <div class="conversion">Despúes <strong>22 Mbps</strong></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+
+
+            <div class="footer">
+                <div style="width: 60%;">
+                    <div style="font-size: 14px; font-weight: 700; color: var(--atom-accent);">MÉDOTOS DE PAGO: BCP /
+                        BBVA (Convenio 9900)</div>
+
+                    <div id="out_total_letras"
+                        style="font-weight: 700; margin-top: 10px; border-bottom: 1px dashed rgba(255,255,255,0.2); padding-bottom: 10px;">
+                        SON: CERO CON 00/100 SOLES
+                    </div>
+
+                    <div class="contact-links">
+                        <div class="contact-item">
+                            <svg class="icon-box" viewBox="0 0 24 24">
+                                <path
+                                    d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" />
+                            </svg>
+                            (01) 000-2026
+                        </div>
+                        <div class="contact-item">
+                            <svg class="icon-box" viewBox="0 0 24 24">
+                                <path
+                                    d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2z" />
+                            </svg>
+                            983 254 346
+                        </div>
+                        <div class="contact-item">
+                            <svg class="icon-box" viewBox="0 0 24 24">
+                                <path
+                                    d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm6.93 6h-2.95a15.65 15.65 0 0 0-1.38-3.56A8.03 8.03 0 0 1 18.92 8z" />
+                            </svg>
+                            atomtechnology.com.pe
+                        </div>
+                    </div>
+                </div>
+
+                <div class="total-box">
+                    <div
+                        style="font-size: 12px; font-weight: 700; color: var(--atom-accent); text-transform: uppercase;">
+                        Total a Liquidar (S/)</div>
+                    <div class="amount" id="out_total">0.00</div>
+                </div>
+            </div>
+
+
+        </div>
+    </main>
+
+
+
+    <!-- MODLA AGREGAR CLIENTES -->
+
+    <div id="modalCliente" class="modal-overlay" style="display:none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>📝 REGISTRO DE NUEVO CLIENTE</h3>
+                <p>Complete los datos en el sistema Atom Cloud</p>
+            </div>
+
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Apellidos y Nombres Completos</label>
+                    <input type="text" id="new_nombre" placeholder="EJ: PEREZ GARCIA JUAN"
+                        oninput="this.value = this.value.toUpperCase()" style="text-transform: uppercase;">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group" style="flex:1">
+                        <label>DNI / RUC</label>
+                        <input type="text" id="new_dni" placeholder="Número">
+                    </div>
+                    <div class="form-group" style="flex:1">
+                        <label>Fecha Instalación</label>
+                        <input type="date" id="new_fecha_inst">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Dirección del Cliente</label>
+                    <input type="text" id="new_direccion" placeholder="Ej: Jr. Amazonas 450 - Iquitos">
+                </div>
+
+                <div class="plan-config-box">
+                    <div class="form-row">
+                        <div class="form-group" style="flex:2">
+                            <label>Plan Elegido</label>
+                            <select id="new_plan" onchange="actualizarPrecioSugerido()">
+                                <option value="">-- Seleccionar --</option>
+                                <option value="Internet 10 Mbps" data-precio="40">10 Mbps (S/ 40)</option>
+                                <option value="Internet 15 Mbps" data-precio="60">15 Mbps (S/ 60)</option>
+                                <option value="Internet 20 Mbps" data-precio="90">20 Mbps (S/ 90)</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="flex:1">
+                            <label>Costo Plan</label>
+                            <input type="number" id="new_precio" placeholder="0.00">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top:10px;">
+                    <label>Detalles / Observaciones (Opcional)</label>
+                    <textarea id="new_notas" placeholder="Ej: Instalado en el 2do piso, cliente pidió router extra..."
+                        style="width:100%; background:#0f172a; color:white; border:none; border-radius:8px; padding:10px; font-family:sans-serif;"></textarea>
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button onclick="registrarNuevoCliente()" class="btn-save-modal">REGISTRAR CLIENTE</button>
+                <button onclick="cerrarModal()" class="btn-cancel-modal">CANCELAR</button>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <script src="script.js"></script>
+    <script src="clientes.js"></script>
+</body>
+
+</html>
