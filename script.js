@@ -243,7 +243,7 @@ function numeroALetrasPeruanas(num) {
     return `SON: ${letras} CON ${centimos.toString().padStart(2, '0')}/100 SOLES`;
 }
 
-// ESTA PARTE ES LA QUE SOLUCIONA TU IMAGEN:
+
 // Crea un vigilante que detecta cuando el número "40.00" aparece
 const observer = new MutationObserver(() => {
     const totalActual = document.getElementById('out_total').innerText;

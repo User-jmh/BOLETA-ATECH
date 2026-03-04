@@ -1,13 +1,12 @@
-// --- LÓGICA DE VENTANA FLOTANTE PARA CLIENTES ---
 
 // Al abrir el modal, ponemos la fecha de hoy por defecto
 function abrirModal() {
     const modal = document.getElementById('modalCliente');
     modal.style.display = 'flex';
-    
+
     // Fecha de hoy por defecto
     document.getElementById('new_fecha_inst').valueAsDate = new Date();
-    
+
     // Enfocar el nombre
     setTimeout(() => document.getElementById('new_nombre').focus(), 100);
 }
@@ -30,13 +29,14 @@ function limpiarFormularioCliente() {
 function actualizarPrecioSugerido() {
     const select = document.getElementById('new_plan');
     const precio = select.options[select.selectedIndex].dataset.precio;
-    if(precio) {
+    if (precio) {
         document.getElementById('new_precio').value = precio;
     }
 }
 
+
 async function registrarNuevoCliente() {
-    // 1. Captura de datos (Nombre forzado a MAYÚSCULAS)
+    // 1. Captura de datos ( MAYÚSCULAS)
     const nombre = document.getElementById('new_nombre').value.trim().toUpperCase();
     const dni = document.getElementById('new_dni').value.trim();
     const direccion = document.getElementById('new_direccion').value.trim();
@@ -57,15 +57,16 @@ async function registrarNuevoCliente() {
     btn.disabled = true;
     btn.innerText = "REGISTRANDO...";
 
+    // 3. Inserción en Supabase a DB
     try {
-        // 3. Inserción en Supabase
+
         const { error } = await _supabase.from('clientes').insert([
-            { 
-                nombre: nombre, 
-                dni: dni, 
+            {
+                nombre: nombre,
+                dni: dni,
                 direccion: direccion,
                 fecha_instalacion: fechaInst,
-                plan_original: plan, 
+                plan_original: plan,
                 precio_original: parseFloat(precio),
                 notas: notas
             }
@@ -73,18 +74,18 @@ async function registrarNuevoCliente() {
 
         if (error) throw error;
 
-        // 4. Éxito
+
         alert("✅ CLIENTE REGISTRADO: " + nombre);
-        
-        // Limpiamos los cargos de la boleta actual y cargamos el plan nuevo
+
+        // Limpiar los cargos de la boleta actual y cargamos el plan nuevo
         const container = document.getElementById('items-container');
-        if(container) {
+        if (container) {
             container.innerHTML = "";
             crearFilaItem(plan, precio);
         }
 
         cerrarModal();
-        
+
         // Refrescamos el selector de clientes en script.js
         if (typeof cargarClientesDesdeNube === 'function') {
             await cargarClientesDesdeNube();
