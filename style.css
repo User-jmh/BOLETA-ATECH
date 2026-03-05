@@ -136,7 +136,7 @@ input[readonly] {
 
 .preview-area {
     flex-grow: 1;
-    margin-left: 80px;
+    margin-left: 380px;
     padding: 40px;
     background: #cbd5e1;
     display: flex;
@@ -165,7 +165,7 @@ input[readonly] {
 .header {
     background-color: var(--atom-black) !important;
     color: white !important;
-    padding: 25px 50px 30px 90px;
+    padding: 50px 60px 50px 80px;
     display: flex;
     justify-content: space-between;
     align-items: center;
