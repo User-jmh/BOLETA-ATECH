@@ -6,6 +6,7 @@
     --atom-gray-bg: #F8FAFC;
     --atom-text-gray: #94A3B8;
     --atom-border: #E2E8F0;
+   
 }
 
 body {
@@ -135,7 +136,7 @@ input[readonly] {
 
 .preview-area {
     flex-grow: 1;
-    margin-left: 380px;
+    margin-left: 80px;
     padding: 40px;
     background: #cbd5e1;
     display: flex;
@@ -164,7 +165,7 @@ input[readonly] {
 .header {
     background-color: var(--atom-black) !important;
     color: white !important;
-    padding: 50px 60px 50px 80px;
+    padding: 25px 50px 30px 90px;
     display: flex;
     justify-content: space-between;
     align-items: center;
