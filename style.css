@@ -1,6 +1,6 @@
 :root {
     --atom-black: #0F172A;
-    --atom-accent: #00FFB2;
+    --atom-accent: #03f2da;
     --atom-bg: #020617;
     --atom-white: #FFFFFF;
     --atom-gray-bg: #F8FAFC;
@@ -218,9 +218,9 @@ input[readonly] {
 }
 
 .label {
-    font-size: 9px;
+    font-size: 10px;
     font-weight: 800;
-    color: #94a3b8;
+    color: #212325;
     text-transform: uppercase;
 }
 
@@ -360,7 +360,7 @@ input[readonly] {
 }
 
 .plan-item .speed {
-    font-size: 18px;
+    font-size: 25px;
     font-weight: 800;
     color: var(--atom-black);
 }
